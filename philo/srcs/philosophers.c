@@ -47,6 +47,7 @@ void	*routine(void *prog)
 	{
 		if (p->i % 2 != 0)
 			usleep(1);
+		// ALSO CHECK HERE IF HE'S DIED in the PROCESS OF THINKING
 		if (!p->one_dead && !p->writing)
 			write_message(p, num, p->msgs.thinking);
 		if (p->one_dead && (pthread_mutex_lock(&p->forks[p->i]) || pthread_mutex_lock(&p->forks[(p->i + 1) % p->n_phi])))
