@@ -1,45 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors_exits.c                                     :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/08 12:19:35 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/11 10:35:53 by diogpere         ###   ########.fr       */
+/*   Created: 2023/05/10 22:43:33 by diogpere          #+#    #+#             */
+/*   Updated: 2023/05/11 10:35:46 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philos.h"
 
-void	free_split(char *argv[])
+int	main(int argc, char *argv[])
 {
-	int	i;
+	t_prog	p;
 
-	i = -1;
-	while (argv && argv[++i])
-		free(argv[i]);
-	free(argv);
-}
-
-int	clear_and_exit(t_prog *p)
-{
-	int	i;
-
-	i = -1;
-	while (++i < p->n_phi)
+	if (argc < 5 || argc > 6 || argv[1][0] == 48 || argv[2][0] == 48)
 	{
-		free(p->philos[i].num);
-		free(p->philos[i].eating);
-		free(p->philos[i].sleeping);
-		free(p->philos[i].thinking);
-		free(p->philos[i].died);
+		ft_printf("Invalid number of arguments\n");
+		return (1);
 	}
-	if (p->philos)
-		free(p->philos);
-	if (p->forks)
-		free(p->forks);
-	if (p->argv)
-		free_split(p->argv);
+	p.argc = argc;
+	p.argv = argv;
+	if (!build_params(&p))
+		return (2);
+	start_threads(&p);
 	return (0);
 }
