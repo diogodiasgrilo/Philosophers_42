@@ -6,7 +6,7 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 12:19:35 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/11 10:35:53 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/12 16:56:45 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,45 @@ void	free_split(char *argv[])
 	free(argv);
 }
 
-int	clear_and_exit(t_prog *p)
+void	free_struct(t_philo *philo)
+{
+	free(philo->num);
+	free(philo->eating);
+	free(philo->sleeping);
+	free(philo->thinking);
+	free(philo->died);
+}
+
+void	*free_everything(t_prog *p)
 {
 	int	i;
 
 	i = -1;
 	while (++i < p->n_phi)
 	{
-		free(p->philos[i].num);
-		free(p->philos[i].eating);
-		free(p->philos[i].sleeping);
-		free(p->philos[i].thinking);
-		free(p->philos[i].died);
+		free_struct(p->philos[i]);
+		free(p->philos[i]);
+		free(p->forks[i]);
 	}
-	if (p->philos)
-		free(p->philos);
-	if (p->forks)
-		free(p->forks);
-	if (p->argv)
-		free_split(p->argv);
+	free(p->philos);
+	free(p->forks);
+	return (0);
+}
+
+int	arg_checker(int argc, char *argv[])
+{
+	int	i;
+	int	j;
+
+	if (argc < 5 || argc > 6)
+		return (1);
+	i = 0;
+	while (argv[++i])
+	{
+		j = -1;
+		while (argv[i][++j])
+			if (!ft_isdigit(argv[i][j]))
+				return (1);
+	}
 	return (0);
 }
