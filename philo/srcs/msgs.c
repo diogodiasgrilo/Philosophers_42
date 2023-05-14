@@ -6,7 +6,7 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 22:36:30 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/12 17:21:21 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/14 17:02:55 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,43 +23,31 @@ int	find_death(t_prog *p)
 	return (0);
 }
 
-void	write_message(t_philo *philo, char *msg, int eating)
+int	write_message(t_philo *philo, char *msg, int eating)
 {
-	int	time;
-
-	if (eating)
-		philo->times_eaten++;
 	pthread_mutex_lock(philo->writing);
 	if (!find_death(philo->p))
 	{
-		get_time(philo->p);
-		time = philo->p->elapsed_time;
-		ft_printf("%dms ", time);
-		ft_printf("%s", msg);
+		if (eating)
+			philo->p->t_all_eaten++;
+		if (!find_death(philo->p))
+		{
+			printf("%d %s", get_time(philo->p), msg);
+			pthread_mutex_unlock(philo->writing);
+			return (0);
+		}
 	}
 	pthread_mutex_unlock(philo->writing);
+	return (1);
 }
 
-void	*small_r(t_philo *philo)
+int	write_dead(t_philo *philo)
 {
-	pthread_mutex_unlock(philo->l_fork);
-	pthread_mutex_unlock(philo->r_fork);
-	return (0);
-}
-
-void	*write_dead(t_philo *philo)
-{
-	int	time;
-
 	pthread_mutex_lock(philo->writing);
 	if (!find_death(philo->p))
-	{
-		get_time(philo->p);
-		time = philo->p->elapsed_time;
-		ft_printf("%dms ", time);
-		ft_printf("%s", philo->died);
-	}
+		printf("%d %s", get_time(philo->p), philo->died);
 	philo->dead = 1;
 	pthread_mutex_unlock(philo->writing);
-	return (small_r(philo));
+	lock(philo);
+	return (1);
 }

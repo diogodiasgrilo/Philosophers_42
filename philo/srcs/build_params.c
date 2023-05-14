@@ -6,7 +6,7 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 12:31:11 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/12 16:55:47 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/14 16:55:35 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,7 @@ void	prep_philos(t_prog *p, int i)
 	p->philos[i]->p = p;
 	p->philos[i]->id = i;
 	p->philos[i]->dead = 0;
-	p->philos[i]->last_meal = 0;
-	p->philos[i]->t_counter = 0;
 	p->philos[i]->t_m_eat = p->t_m_eat;
-	p->philos[i]->times_eaten = 0;
 	p->philos[i]->n_phi = p->n_phi;
 	p->philos[i]->writing = &(p->writing);
 	p->philos[i]->r_fork = p->forks[i];
@@ -52,6 +49,7 @@ void	*build_params(t_prog *p)
 	p->t_die = ft_atoi(p->argv[2]);
 	p->t_eat = ft_atoi(p->argv[3]);
 	p->t_sleep = ft_atoi(p->argv[4]);
+	p->t_all_eaten = 0;
 	if (p->argc == 6)
 		p->t_m_eat = ft_atoi(p->argv[5]);
 	else

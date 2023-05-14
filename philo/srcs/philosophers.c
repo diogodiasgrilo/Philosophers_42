@@ -6,7 +6,7 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 16:24:39 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/12 17:22:03 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/14 16:51:56 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,94 +14,66 @@
 
 #include "../include/philos.h"
 
-void	sleep_now(t_philo *philo, int duration, int option)
-{
-	usleep(duration);
-	philo->last_meal += duration;
-	if (option)
-		philo->t_counter += duration;
-}
-
 int	thinking_philo(t_philo *philo)
 {
-	if (!find_death(philo->p))
-	{
-		write_message(philo, philo->thinking, 0);
-		while (1)
-		{
-			if (philo->n_phi > 1 && \
-				!pthread_mutex_lock(philo->l_fork) \
-					&& !pthread_mutex_lock(philo->r_fork))
-				break ;
-			pthread_mutex_unlock(philo->l_fork);
-			pthread_mutex_unlock(philo->r_fork);
-			if (philo->last_meal >= philo->p->t_die)
-			{
-				write_dead(philo);
-				return (1);
-			}
-			else
-				sleep_now(philo, 1, 1);
-		}
-	}
-	if (philo->last_meal >= philo->p->t_die)
-	{
-		write_dead(philo);
+	int	check_dead;
+
+	if (!philo->last_meal)
+		philo->last_meal = get_time(philo->p);
+	if (write_message(philo, philo->thinking, 0))
 		return (1);
+	if (philo->n_phi > 1)
+	{
+		pthread_mutex_lock(philo->l_fork);
+		pthread_mutex_lock(philo->r_fork);
+		check_dead = (get_time(philo->p) - philo->last_meal);
+		if (check_dead >= philo->p->t_die)
+			return (write_dead(philo));
 	}
+	else
+		return (write_dead(philo));
 	return (0);
 }
 
 int	eating_philo(t_philo *philo)
 {
-	if (philo->t_m_eat && !find_death(philo->p))
+	int	check_dead;
+
+	check_dead = 0;
+	if (philo->t_m_eat)
 	{
-		philo->last_meal = 0;
-		write_message(philo, philo->eating, 1);
-		philo->t_counter = 0;
-		while (philo->t_m_eat && \
-			philo->t_counter < philo->p->t_eat)
+		philo->last_meal = get_time(philo->p);
+		if (write_message(philo, philo->eating, 1))
+			return (1);
+		while (check_dead < philo->p->t_eat)
 		{
-			if (philo->last_meal >= philo->p->t_die)
-			{
-				write_dead(philo);
-				return (1);
-			}
-			else
-				sleep_now(philo, 1, 1);
+			if (check_dead >= philo->p->t_die)
+				return (write_dead(philo));
+			check_dead = (get_time(philo->p) - philo->last_meal);
 		}
 		pthread_mutex_unlock(philo->l_fork);
 		pthread_mutex_unlock(philo->r_fork);
-	}
-	if (philo->last_meal >= philo->p->t_die)
-	{
-		write_dead(philo);
-		return (1);
 	}
 	return (0);
 }
 
 int	sleeping_philo(t_philo *philo)
 {
-	if (!find_death(philo->p))
-	{
-		write_message(philo, philo->sleeping, 0);
-		philo->t_counter = 0;
-		while (philo->t_counter < philo->p->t_sleep)
-		{
-			if (philo->last_meal >= philo->p->t_die)
-			{
-				write_dead(philo);
-				return (1);
-			}
-			else
-				sleep_now(philo, 1, 1);
-		}
-	}
-	if (philo->last_meal >= philo->p->t_die)
-	{
-		write_dead(philo);
+	int	start;
+	int	counter;
+	int	check_dead;
+
+	check_dead = 0;
+	counter = check_dead;
+	start = get_time(philo->p);
+	if (write_message(philo, philo->sleeping, 0))
 		return (1);
+	while (counter < philo->p->t_sleep)
+	{
+		if (check_dead >= philo->p->t_die)
+			return (write_dead(philo));
+		counter = (get_time(philo->p) - start);
+		check_dead = (get_time(philo->p) - philo->last_meal);
 	}
 	return (0);
 }
@@ -111,22 +83,20 @@ void	*routine(void *philo_v)
 	t_philo	*philo;
 
 	philo = (t_philo *)philo_v;
-	while (1)
-		if (philo->p->begin)
-			break ;
-	if ((philo->id) % 2 == 0)
-		sleep_now(philo, 10, 1);
+	if (philo->p->n_phi > 1 && (philo->id) % 2 == 0)
+		usleep(2);
+	philo->last_meal = 0;
 	while (!find_death(philo->p))
 	{
 		if (thinking_philo(philo))
 			return (0);
 		if (eating_philo(philo))
 			return (0);
-		// Wait for everyone to finish eating the number of times before returning
-		if (philo->times_eaten >= philo->t_m_eat && philo->t_m_eat >= 0)
-			return (small_r(philo));
+		if (philo->t_m_eat >= 0 && philo->p->t_all_eaten >= philo->p->n_phi
+			* philo->t_m_eat)
+			return (lock(philo));
 		if (sleeping_philo(philo))
 			return (0);
 	}
-	return (small_r(philo));
+	return (lock(philo));
 }

@@ -6,11 +6,18 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 12:19:35 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/12 16:56:45 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/14 12:49:59 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philos.h"
+
+void	*lock(t_philo *philo)
+{
+	pthread_mutex_unlock(philo->l_fork);
+	pthread_mutex_unlock(philo->r_fork);
+	return (0);
+}
 
 void	free_split(char *argv[])
 {
@@ -54,6 +61,10 @@ int	arg_checker(int argc, char *argv[])
 
 	if (argc < 5 || argc > 6)
 		return (1);
+	i = 0;
+	while (argv[++i])
+		if (ft_atoi(argv[i]) < 0)
+			return (1);
 	i = 0;
 	while (argv[++i])
 	{
