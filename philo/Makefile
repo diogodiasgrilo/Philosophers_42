@@ -4,7 +4,7 @@ SRCS =	$(wildcard ./srcs/*.c)
 
 OBJS :=$(SRCS:.c=.o)
 
-CFLAGS = -pthread -Wall -Wextra -Werror -g #-fsanitize=address
+CFLAGS = -pthread -Wall -Wextra -Werror -g -fsanitize=address
 
 all: $(NAME)
 
