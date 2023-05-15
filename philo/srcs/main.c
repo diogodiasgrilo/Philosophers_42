@@ -6,7 +6,7 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 22:43:33 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/14 17:02:59 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/15 19:15:05 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	main(int argc, char *argv[])
 	}
 	p.argc = argc;
 	p.argv = argv;
+	p.t_m_eat = -1;
 	if (!build_params(&p))
 		return (1);
 	start_threads(&p);

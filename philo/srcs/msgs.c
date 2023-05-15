@@ -6,7 +6,7 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 22:36:30 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/14 17:02:55 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/15 18:51:26 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,6 @@ int	write_dead(t_philo *philo)
 		printf("%d %s", get_time(philo->p), philo->died);
 	philo->dead = 1;
 	pthread_mutex_unlock(philo->writing);
-	lock(philo);
+	unlock(philo);
 	return (1);
 }
