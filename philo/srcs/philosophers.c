@@ -6,7 +6,7 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 16:24:39 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/15 19:13:24 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/15 19:32:01 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,16 @@ int	thinking_philo(t_philo *philo)
 		philo->last_meal = get_time(philo->p);
 	if (write_message(philo, philo->thinking, 0))
 		return (1);
-	if (philo->n_phi > 1)
-	{
-		while (philo->l_fork->state != 0)
-			if ((get_time(philo->p) - philo->last_meal) >= philo->p->t_die)
-				return (write_dead(philo));
-		pthread_mutex_lock(philo->l_fork->fork);
-		philo->l_fork->state = 1;
-		while (philo->r_fork->state != 0)
-			if ((get_time(philo->p) - philo->last_meal) >= philo->p->t_die)
-				return (write_dead(philo));
-		pthread_mutex_lock(philo->r_fork->fork);
-		philo->r_fork->state = 1;
-	}
-	else
-		return (write_dead(philo));
+	while (philo->n_phi > 1 && philo->l_fork->state != 0)
+		if ((get_time(philo->p) - philo->last_meal) >= philo->p->t_die)
+			return (write_dead(philo));
+	pthread_mutex_lock(philo->l_fork->fork);
+	philo->l_fork->state = 1;
+	while (philo->r_fork->state != 0)
+		if ((get_time(philo->p) - philo->last_meal) >= philo->p->t_die)
+			return (write_dead(philo));
+	pthread_mutex_lock(philo->r_fork->fork);
+	philo->r_fork->state = 1;
 	return (0);
 }
 
