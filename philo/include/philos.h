@@ -6,7 +6,7 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 16:25:23 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/14 17:14:01 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/15 18:53:16 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@
 # include <sys/time.h>
 
 struct	s_prog;
+
+typedef struct s_fork
+{
+	pthread_mutex_t	*fork;
+	int				state;
+}				t_fork;
 
 typedef struct s_philo
 {
@@ -37,8 +43,8 @@ typedef struct s_philo
 	pthread_t		th;
 	struct s_prog	*p;
 	pthread_mutex_t	*writing;
-	pthread_mutex_t	*l_fork;
-	pthread_mutex_t	*r_fork;
+	t_fork			*l_fork;
+	t_fork			*r_fork;
 }				t_philo;
 
 typedef struct s_prog
@@ -53,6 +59,7 @@ typedef struct s_prog
 	int				t_sleep;
 	int				t_m_eat;
 	int				t_all_eaten;
+	t_fork			**states;
 	pthread_mutex_t	**forks;
 	pthread_mutex_t	writing;
 	struct timeval	start_time;
@@ -62,8 +69,8 @@ typedef struct s_prog
 char				*ft_itoa(int n);
 int					ft_isdigit(int c);
 int					get_time(t_prog	*p);
-void				*lock(t_philo *philo);
 int					find_death(t_prog *p);
+void				*unlock(t_philo *philo);
 void				*routine(void *philo_v);
 int					ft_strlen(const char *s);
 int					ft_atoi(const char *str);
