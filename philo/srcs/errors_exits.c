@@ -6,7 +6,7 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 12:19:35 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/15 18:53:01 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/16 11:22:49 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	*free_everything(t_prog *p)
 		free(p->philos[i]);
 		free(p->forks[i]);
 	}
+	free(p->states);
 	free(p->philos);
 	free(p->forks);
 	return (0);

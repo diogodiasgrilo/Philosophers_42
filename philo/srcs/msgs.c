@@ -6,7 +6,7 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 22:36:30 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/15 18:51:26 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/16 11:56:12 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,14 @@ int	write_message(t_philo *philo, char *msg, int eating)
 	return (1);
 }
 
-int	write_dead(t_philo *philo)
+int	write_dead(t_philo *philo, int time)
 {
 	pthread_mutex_lock(philo->writing);
 	if (!find_death(philo->p))
-		printf("%d %s", get_time(philo->p), philo->died);
-	philo->dead = 1;
+	{
+		printf("%d %s", time, philo->died);
+		philo->dead = 1;
+	}
 	pthread_mutex_unlock(philo->writing);
 	unlock(philo);
 	return (1);

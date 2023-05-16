@@ -6,7 +6,7 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 16:24:39 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/15 19:32:01 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/16 12:08:24 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,16 @@
 
 int	thinking_philo(t_philo *philo)
 {
-	if (!philo->last_meal)
-		philo->last_meal = get_time(philo->p);
 	if (write_message(philo, philo->thinking, 0))
 		return (1);
 	while (philo->n_phi > 1 && philo->l_fork->state != 0)
 		if ((get_time(philo->p) - philo->last_meal) >= philo->p->t_die)
-			return (write_dead(philo));
+			return (write_dead(philo, get_time(philo->p)));
 	pthread_mutex_lock(philo->l_fork->fork);
 	philo->l_fork->state = 1;
 	while (philo->r_fork->state != 0)
 		if ((get_time(philo->p) - philo->last_meal) >= philo->p->t_die)
-			return (write_dead(philo));
+			return (write_dead(philo, get_time(philo->p)));
 	pthread_mutex_lock(philo->r_fork->fork);
 	philo->r_fork->state = 1;
 	return (0);
@@ -46,7 +44,7 @@ int	eating_philo(t_philo *philo)
 		while (check_dead < philo->p->t_eat)
 		{
 			if (check_dead >= philo->p->t_die)
-				return (write_dead(philo));
+				return (write_dead(philo, get_time(philo->p)));
 			check_dead = (get_time(philo->p) - philo->last_meal);
 		}
 		unlock(philo);
@@ -68,7 +66,7 @@ int	sleeping_philo(t_philo *philo)
 	while (counter < philo->p->t_sleep)
 	{
 		if (check_dead >= philo->p->t_die)
-			return (write_dead(philo));
+			return (write_dead(philo, get_time(philo->p)));
 		counter = (get_time(philo->p) - start);
 		check_dead = (get_time(philo->p) - philo->last_meal);
 	}
@@ -80,9 +78,6 @@ void	*routine(void *philo_v)
 	t_philo	*philo;
 
 	philo = (t_philo *)philo_v;
-	if (philo->p->n_phi > 1 && (philo->id) % 2 == 0)
-		usleep(2);
-	philo->last_meal = 0;
 	while (!find_death(philo->p))
 	{
 		if (thinking_philo(philo))
