@@ -6,7 +6,7 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 12:19:35 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/16 11:22:49 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/17 15:06:31 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void	*unlock(t_philo *philo)
 {
-	pthread_mutex_unlock(philo->l_fork->fork);
-	philo->l_fork->state = 0;
 	pthread_mutex_unlock(philo->r_fork->fork);
 	philo->r_fork->state = 0;
+	pthread_mutex_unlock(philo->l_fork->fork);
+	philo->l_fork->state = 0;
 	return (0);
 }
 
