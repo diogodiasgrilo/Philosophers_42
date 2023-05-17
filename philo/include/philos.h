@@ -6,7 +6,7 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 16:25:23 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/15 18:53:16 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/17 15:00:47 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ void				*build_params(t_prog *p);
 void				start_threads(t_prog *p);
 void				free_split(char *argv[]);
 void				*free_everything(t_prog *p);
-int					write_dead(t_philo *philo);
 void				prep_philos(t_prog *p, int i);
 int					arg_checker(int argc, char *argv[]);
+int					write_dead(t_philo *philo, int time);
 void				mutex_manager(t_prog *p, int action);
 char				*ft_strjoin(char const *s1, char const *s2);
 int					ft_strlcat(char *dst, const char *src, int dstsize);
