@@ -6,7 +6,7 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 12:31:11 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/17 15:22:22 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/18 16:23:20 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	prep_philos(t_prog *p, int i)
 	p->philos[i]->n_phi = p->n_phi;
 	p->philos[i]->last_meal = 0;
 	p->philos[i]->writing = &(p->writing);
+	p->philos[i]->locks = &(p->locks);
 	p->philos[i]->r_fork = p->states[i];
 	if (i + 1 == p->n_phi)
 		p->philos[i]->l_fork = p->states[0];

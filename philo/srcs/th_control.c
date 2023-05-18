@@ -6,23 +6,11 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 22:32:53 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/14 17:07:05 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/18 16:33:02 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philos.h"
-
-int	get_time(t_prog *p)
-{
-	struct timeval	current_time;
-	long			seconds;
-	long			microseconds;
-
-	gettimeofday(&current_time, NULL);
-	seconds = current_time.tv_sec - p->start_time.tv_sec;
-	microseconds = current_time.tv_usec - p->start_time.tv_usec;
-	return ((seconds * 1000) + (microseconds / 1000));
-}
 
 void	mutex_manager(t_prog *p, int action)
 {
@@ -34,12 +22,17 @@ void	mutex_manager(t_prog *p, int action)
 		while (++i < p->n_phi)
 			pthread_mutex_init(p->forks[i], 0);
 		pthread_mutex_init(&p->writing, 0);
+		pthread_mutex_init(&p->locks, 0);
+		pthread_mutex_init(&p->all_eaten, 0);
 	}
 	else
 	{
+		i = -1;
 		while (++i < p->n_phi)
-			pthread_mutex_destroy(p->forks[i]);
+			pthread_mutex_destroy(p->states[i]->fork);
 		pthread_mutex_destroy(&p->writing);
+		pthread_mutex_destroy(&p->locks);
+		pthread_mutex_destroy(&p->all_eaten);
 	}
 }
 

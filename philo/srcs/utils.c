@@ -6,11 +6,23 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 17:10:34 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/14 17:14:11 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/18 16:25:01 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philos.h"
+
+int	get_time(t_prog *p)
+{
+	struct timeval	current_time;
+	long			seconds;
+	long			microseconds;
+
+	gettimeofday(&current_time, NULL);
+	seconds = current_time.tv_sec - p->start_time.tv_sec;
+	microseconds = current_time.tv_usec - p->start_time.tv_usec;
+	return ((seconds * 1000) + (microseconds / 1000));
+}
 
 int	ft_isdigit(int c)
 {
