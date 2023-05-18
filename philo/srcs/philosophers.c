@@ -6,7 +6,7 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 16:24:39 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/18 17:21:47 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/18 19:44:13 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,7 @@ void	*routine(void *philo_v)
 			{
 				pthread_mutex_lock(philo->locks);
 				if (philo->r_fork->state == 1)
-				{	
 					pthread_mutex_unlock(philo->r_fork->fork);
-				}
 				pthread_mutex_unlock(philo->locks);
 			}	
 			else
@@ -115,10 +113,7 @@ void	*routine(void *philo_v)
 			return (0);
 		}
 		if (eating_philo(philo))
-		{
-			unlock(philo);
-			return (0);
-		}
+			return unlock(philo);
 		pthread_mutex_lock(&philo->p->all_eaten);
 		if (philo->t_m_eat >= 0 && philo->p->t_all_eaten >= philo->p->n_phi
 			* philo->t_m_eat)

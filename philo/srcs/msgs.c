@@ -6,7 +6,7 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 22:36:30 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/18 17:19:06 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/18 19:40:33 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	grabs_left_first(t_philo *philo)
 	pthread_mutex_lock(philo->l_fork->fork);
 	while (check_state(philo, 0))
 		if ((get_time(philo->p) - philo->last_meal) >= philo->p->t_die)
-			return (write_dead(philo, get_time(philo->p)));	
+			return (write_dead(philo, get_time(philo->p)));
 	pthread_mutex_lock(philo->locks);
 	philo->r_fork->state = 1;
 	pthread_mutex_unlock(philo->locks);
