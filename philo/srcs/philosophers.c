@@ -6,7 +6,7 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 16:24:39 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/18 19:44:13 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/19 12:10:13 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	eating_philo(t_philo *philo)
 	check_dead = 0;
 	while (philo->t_m_eat == 0)
 		if ((get_time(philo->p) - philo->last_meal) >= philo->p->t_die)
-			return (write_dead(philo, get_time(philo->p)));
+			return (write_dead(philo, get_time(philo->p), 1));
 	if (philo->t_m_eat)
 	{
 		philo->last_meal = get_time(philo->p);
@@ -61,7 +61,7 @@ int	eating_philo(t_philo *philo)
 		while (check_dead < philo->p->t_eat)
 		{
 			if (check_dead >= philo->p->t_die)
-				return (write_dead(philo, get_time(philo->p)));
+				return (write_dead(philo, get_time(philo->p), 1));
 			check_dead = (get_time(philo->p) - philo->last_meal);
 		}
 		unlock(philo);
@@ -83,7 +83,7 @@ int	sleeping_philo(t_philo *philo)
 	while (counter < philo->p->t_sleep)
 	{
 		if (check_dead >= philo->p->t_die)
-			return (write_dead(philo, get_time(philo->p)));
+			return (write_dead(philo, get_time(philo->p), 0));
 		counter = (get_time(philo->p) - start);
 		check_dead = (get_time(philo->p) - philo->last_meal);
 	}
@@ -100,20 +100,9 @@ void	*routine(void *philo_v)
 	while (1)
 	{
 		if (thinking_philo(philo))
-		{
-			if ((philo->id + 1) % 2 == 0)
-			{
-				pthread_mutex_lock(philo->locks);
-				if (philo->r_fork->state == 1)
-					pthread_mutex_unlock(philo->r_fork->fork);
-				pthread_mutex_unlock(philo->locks);
-			}	
-			else
-				pthread_mutex_unlock(philo->l_fork->fork);
 			return (0);
-		}
 		if (eating_philo(philo))
-			return unlock(philo);
+			return (0);
 		pthread_mutex_lock(&philo->p->all_eaten);
 		if (philo->t_m_eat >= 0 && philo->p->t_all_eaten >= philo->p->n_phi
 			* philo->t_m_eat)
