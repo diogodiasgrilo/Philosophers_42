@@ -6,7 +6,7 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 16:25:23 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/18 16:31:19 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/19 12:09:32 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,10 @@ void				prep_philos(t_prog *p, int i);
 int					grabs_left_first(t_philo *philo);
 int					grabs_right_first(t_philo *philo);
 int					arg_checker(int argc, char *argv[]);
-int					write_dead(t_philo *philo, int time);
 void				mutex_manager(t_prog *p, int action);
 int					check_state(t_philo *philo, int fork);
 char				*ft_strjoin(char const *s1, char const *s2);
+int					write_dead(t_philo *philo, int time, int flag);
 int					ft_strlcat(char *dst, const char *src, int dstsize);
 int					write_message(t_philo *philo, char *msg, int eating);
 unsigned long int	ft_strlcpy(char *dst, const char *src,
