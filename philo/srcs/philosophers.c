@@ -6,11 +6,9 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 16:24:39 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/19 12:10:13 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/22 13:03:10 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// CANT USE EXIT
 
 #include "../include/philos.h"
 
@@ -57,15 +55,19 @@ int	eating_philo(t_philo *philo)
 	{
 		philo->last_meal = get_time(philo->p);
 		if (write_message(philo, philo->eating, 1))
+		{
+			pthread_mutex_unlock(philo->r_fork->fork);
+			pthread_mutex_unlock(philo->l_fork->fork);
 			return (1);
+		}		
 		while (check_dead < philo->p->t_eat)
 		{
 			if (check_dead >= philo->p->t_die)
 				return (write_dead(philo, get_time(philo->p), 1));
 			check_dead = (get_time(philo->p) - philo->last_meal);
 		}
-		unlock(philo);
 	}
+	unlock(philo);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: diogpere <diogpere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 12:19:35 by diogpere          #+#    #+#             */
-/*   Updated: 2023/05/18 17:13:57 by diogpere         ###   ########.fr       */
+/*   Updated: 2023/05/22 13:20:28 by diogpere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	arg_checker(int argc, char *argv[])
 		return (1);
 	i = 0;
 	while (argv[++i])
-		if (ft_atoi(argv[i]) < 0)
+		if (ft_atoi(argv[i]) < 0 || !argv[i][0])
 			return (1);
 	i = 0;
 	while (argv[++i])
